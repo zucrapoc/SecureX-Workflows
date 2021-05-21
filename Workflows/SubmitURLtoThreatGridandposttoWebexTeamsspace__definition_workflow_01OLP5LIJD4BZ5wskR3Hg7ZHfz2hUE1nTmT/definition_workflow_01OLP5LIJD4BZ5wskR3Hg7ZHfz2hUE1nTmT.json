@@ -108,6 +108,7 @@
                 "properties": {
                   "completion_type": "failed-completed",
                   "continue_on_failure": false,
+                  "description": "Unsupported observable",
                   "display_name": "Unsupported observable",
                   "result_message": "This workflow does not support the observable type \"$workflow.definition_workflow_01OLP5LIJD4BZ5wskR3Hg7ZHfz2hUE1nTmT.input.variable_workflow_01OLP5LIBQS1U0jLQMJDIaKda8tzcRkLbER$\"",
                   "skip_execution": false
@@ -142,6 +143,59 @@
           "workflow_id": "definition_workflow_01G6ON26XJCI416HUHXccGuDUIVTB3a6ozJ"
         },
         "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01OLP8C1RBUZM1QppEZf1bLVOmo4ozZOOps",
+        "name": "Replace String",
+        "title": "Replace String",
+        "type": "core.replacestring",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Replace String",
+          "input_string": "$workflow.definition_workflow_01OLP5LIJD4BZ5wskR3Hg7ZHfz2hUE1nTmT.input.variable_workflow_01OLP5LIBQVYF0Nj6k7LEhHYpCZAPxrD3PG$",
+          "replace_list": [
+            {
+              "replaced_string": "http",
+              "replacement_string": "hxxp"
+            },
+            {
+              "replaced_string": ".",
+              "replacement_string": "[.]"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01OLP9VSPQ5ZI2wWFbfK0rjDc6sIEIDCbMQ",
+        "name": "Webex Teams - Send Message to User",
+        "title": "Webex Teams - Send Message to User",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Webex Teams - Send Message to User",
+          "input": {
+            "variable_workflow_01FHS2UP7FNRI3hQkE9KFPLzxq1MuyZ7i4C": "$env.variable_01JZQIZ079U6T44jO6KzCyZuZunK691ql1b.env.variable_01JZQIZ079U6T44jO6KzCyZuZunK691ql1b$",
+            "variable_workflow_01FHS2UP7FU767Yf512VoXF8Vx7cfmiRwBX": "",
+            "variable_workflow_01FHS2UP7FVZC424MqvtAy88gIvi4VfEK6z": "Threat Response Investigator $workflow.definition_workflow_01OLP5LIJD4BZ5wskR3Hg7ZHfz2hUE1nTmT.output.started_by$ submitted an observable with value $activity.definition_activity_01OLP8C1RBUZM1QppEZf1bLVOmo4ozZOOps.output.result_string$ to Threat Grid for analysis. View the submission results at $activity.definition_activity_01OLP5NUGMMY66RNjkxwkWqyE5k8gpm0rff.output.variable_workflow_01G8MPJVEP82S65GioWKA4a4ZhVoE69nlvZ$",
+            "variable_workflow_01FHS2UP7FX4H1ncjCzr9yKoe4mkm3DnEfx": "**URL ANALYSIS NOTIFICATION**\u003cbr\u003eInvestigator *$workflow.definition_workflow_01OLP5LIJD4BZ5wskR3Hg7ZHfz2hUE1nTmT.output.started_by$* submitted an observable with value $activity.definition_activity_01OLP8C1RBUZM1QppEZf1bLVOmo4ozZOOps.output.result_string$ to Threat Grid for analysis. View the submission results at $activity.definition_activity_01OLP5NUGMMY66RNjkxwkWqyE5k8gpm0rff.output.variable_workflow_01G8MPJVEP82S65GioWKA4a4ZhVoE69nlvZ$",
+            "variable_workflow_01FNN77D7KAVX4MlMaoUnGcsoENvbUDm52H": ""
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01JYQ08H9RQ876LftKLI1y3W4lCCcoQNoRi",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4"
+        },
+        "object_type": "definition_activity"
       }
     ],
     "categories": [
@@ -167,6 +221,25 @@
       "base_type": "category",
       "category_type": "custom",
       "object_type": "category"
+    }
+  },
+  "targets": {
+    "definition_target_01JYQ08H9RQ876LftKLI1y3W4lCCcoQNoRi": {
+      "unique_name": "definition_target_01JYQ08H9RQ876LftKLI1y3W4lCCcoQNoRi",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Webex Teams",
+        "disable_certificate_validation": false,
+        "display_name": "Webex Teams",
+        "host": "webexapis.com",
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
     }
   },
   "target_groups": {
@@ -204,9 +277,22 @@
         "is_invisible": false
       },
       "object_type": "variable"
+    },
+    "variable_01JZQIZ079U6T44jO6KzCyZuZunK691ql1b": {
+      "unique_name": "variable_01JZQIZ079U6T44jO6KzCyZuZunK691ql1b",
+      "properties": {
+        "value": "*****",
+        "scope": "env",
+        "name": "WebexBot",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
     }
   },
   "atomic_workflows": [
+    "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4",
     "definition_workflow_01G6ON26XJCI416HUHXccGuDUIVTB3a6ozJ"
   ]
 }
