@@ -1,0 +1,184 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5",
+    "name": "NoIP-UpdateDomainIP",
+    "title": "NoIP-UpdateDomainIP",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "WAN2",
+          "type": "datatype.string",
+          "description": "WAN2 IP",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OP0NLOH32AS4dfSsWawAy0xWSYwiHGd6p",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "sslvpn.acme-academy.me",
+          "scope": "static",
+          "name": "Domain2",
+          "type": "datatype.string",
+          "description": "sslvpn.acme-academy.me",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OP0OU1JVPV47T0UQUMqc6o2ZooTmSuCRM",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "guac.acme-academy.me",
+          "scope": "static",
+          "name": "Domain1",
+          "type": "datatype.string",
+          "description": "guac.acme-academy.me",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OP0P65ZO4UI6iElm922duNzMftOVtcUqY",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "WAN1",
+          "type": "datatype.string",
+          "description": "WAN1 IP",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OP0KKD50F5V5ae6JQAQHZQGnvPxHwktYp",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "NoIP",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "NoIP-UpdateDomainIP",
+      "display_name": "NoIP-UpdateDomainIP",
+      "runtime_user": {
+        "runtime_user_id": "definition_runtime_user_01OP0SQQOUE0J7bfX1dBk7qaltDFOsyUYi6",
+        "override_target_runtime_user": true,
+        "runtime_user_type": "runtime_user.web-service_basic_credentials"
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "target_id": "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01OP1BPSX3EBW1YeUdieif0P4wHC7IDVczR",
+        "name": "HTTP Request",
+        "title": "Set WAN1 to Domain1",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "display_name": "Set WAN1 to Domain1",
+          "method": "GET",
+          "relative_url": "update?hostname=$workflow.definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5.static.variable_workflow_01OP0P65ZO4UI6iElm922duNzMftOVtcUqY$\u0026myip=$workflow.definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5.input.variable_workflow_01OP0KKD50F5V5ae6JQAQHZQGnvPxHwktYp$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01OP1HMJUVU5I6zmIzrLY8P6OIdNrtprFWD",
+        "name": "HTTP Request",
+        "title": "Set WAN2 to Domain2",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "display_name": "Set WAN2 to Domain2",
+          "method": "GET",
+          "relative_url": "update?hostname=$workflow.definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5.static.variable_workflow_01OP0OU1JVPV47T0UQUMqc6o2ZooTmSuCRM$\u0026myip=$workflow.definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5.input.variable_workflow_01OP0NLOH32AS4dfSsWawAy0xWSYwiHGd6p$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y": {
+      "unique_name": "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y",
+      "name": "NoIP_Target",
+      "title": "NoIP_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "NoIP_Target",
+        "host": "dynupdate.no-ip.com",
+        "ignore_proxy": true,
+        "no_runtime_user": true,
+        "path": "/nic",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01OP0SQQOUE0J7bfX1dBk7qaltDFOsyUYi6": {
+      "unique_name": "definition_runtime_user_01OP0SQQOUE0J7bfX1dBk7qaltDFOsyUYi6",
+      "name": "No-IP_Credentials",
+      "title": "No-IP_Credentials",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "display_name": "No-IP_Credentials"
+      }
+    }
+  }
+}
