@@ -1,0 +1,386 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu",
+    "name": "Meraki - MX - WAN IP to NoIP Domains",
+    "title": "Meraki - MX - WAN IP to NoIP Domains",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Meraki API Key",
+          "type": "datatype.secure_string",
+          "description": "Your Meraki API key. This can be generated in your Meraki dashboard",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXNO9O2ASQ7UyUnXf0gtvu7d7DIYNqXW",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "wan2",
+          "scope": "local",
+          "name": "WAN2",
+          "type": "datatype.string",
+          "description": "WAN2",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXZ3DPULUP0PFyhUzbSD1XqVPpfwNCU5",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "wan1",
+          "scope": "local",
+          "name": "WAN1",
+          "type": "datatype.string",
+          "description": "WAN1",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXNO9O23WU7GBZdHxCs4UN8AhAjiR8Rs",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow Get WAN IP Addresses on a Meraki MX firewall  and update NoIP Managed domains\n\nTarget Group: Cisco Meraki\n\nTargets: Cisco Meraki\n",
+      "display_name": "Meraki - MX - WAN IP to NoIP Domains",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "target_id": "definition_target_01ONA7LL0PKAJ3tE40MgMW7oDJgYVctohQD",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01OOXNRBNZM5L3fQPmleXMU69XKy2vpCFaA",
+        "name": "Group",
+        "title": "Get network information",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Get network information",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01OOXNRUJ4ATH5HCylMZN5k6CgO281nmznE",
+            "name": "Meraki - Get Organizations",
+            "title": "Meraki - Get Organizations",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Meraki - Get Organizations",
+              "input": {
+                "variable_workflow_01N8U1613Y78R4NtudsFllndh7zWxvfvPfQ": "$global.variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV.global.variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV$"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "target_type": "web-service.endpoint",
+                "use_workflow_target": true
+              },
+              "workflow_id": "definition_workflow_01N8TO2HK1Q8U0JgFhBJbF2XBKYElhuFXU5"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01OOXNSRSG59A1MmGDo6fMQEnxf0NHYRzlo",
+            "name": "JSONPath Query",
+            "title": "Extract organization ID",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "Extract organization ID",
+              "input_json": "$activity.definition_activity_01OOXNRUJ4ATH5HCylMZN5k6CgO281nmznE.output.variable_workflow_01N8TO2HCOMCH0wr6TF0gzXkVQTEuU3A5RH$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.[0].id",
+                  "jsonpath_query_name": "organizationId",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01OOXTIW9KS3W1YPlzXsMSGuYD1wptjg4WB",
+            "name": "Meraki - MX - Get Uplink Status",
+            "title": "Meraki - MX - Get Uplink Status",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Meraki - MX - Get Uplink Status",
+              "input": {
+                "variable_workflow_01OOXB5RPB32Q7fL22LwEQrmH9oiDUGYfm9": "$global.variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV.global.variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV$",
+                "variable_workflow_01OOXB5RPB494160vaqJQB6FvcKaAHlUvHA": "$activity.definition_activity_01OOXNSRSG59A1MmGDo6fMQEnxf0NHYRzlo.output.jsonpath_queries.organizationId$"
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "target_type": "web-service.endpoint",
+                "use_workflow_target": true
+              },
+              "workflow_id": "definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01OOXNU87WIL72jE4jYVtg6ZIHxsMV6hM6w",
+            "name": "JSONPath Query",
+            "title": "Extract WAN IPs",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": true,
+              "description": "Extract WAN IPs",
+              "display_name": "Extract WAN IPs",
+              "input_json": "$activity.definition_activity_01OOXTIW9KS3W1YPlzXsMSGuYD1wptjg4WB.output.variable_workflow_01OOXB5RPAZDK0vGGWCiidrQjVD8cJNKNdz$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.[?(@.model==\"MX250\")].uplinks[?(@.interface==\"wan1\")].ip",
+                  "jsonpath_query_name": "wan1",
+                  "jsonpath_query_type": "string"
+                },
+                {
+                  "jsonpath_query": "$.[?(@.model==\"MX250\")].uplinks[?(@.interface==\"wan2\")].ip",
+                  "jsonpath_query_name": "wan2",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01OOXNUQ521GG2CLUnCK4ieFYrthpw3R46c",
+            "name": "Condition Block",
+            "title": "Were we able to extract the Object group ID",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Were we able to extract the Object group ID",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_01OOXNV7DP1K51MUWwJhgtlhmWOPvZDl6VW",
+                "name": "Condition Branch",
+                "title": "No",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01OOXNU87WIL72jE4jYVtg6ZIHxsMV6hM6w.output.succeeded$",
+                    "operator": "eq",
+                    "right_operand": false
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "No",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01OOXNV9PF9GF0mcY2EGWKJlpbt1SKcX8Sn",
+                    "name": "Completed",
+                    "title": "Unknown network",
+                    "type": "logic.completed",
+                    "base_type": "activity",
+                    "properties": {
+                      "completion_type": "failed-completed",
+                      "continue_on_failure": false,
+                      "display_name": "Unknown network",
+                      "result_message": "Failed to extract an ID for the network \"$workflow.definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu.local.variable_workflow_01OOXNO9O23WU7GBZdHxCs4UN8AhAjiR8Rs$\".\n\nNetworks for your organization;\n$activity.01OO5MKMV0TL20IbohCs8c1W2mgC9BTfsMd.output.01ON9IBB33ISN79sbSnC8C2pPiUZI6aTwjY$",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01OP0GQAH5DQY7Wo38vInnEQbHFDa2yzYHb",
+        "name": "Set Variables",
+        "title": "Set WAN1 \u0026 WAN2",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set WAN1 \u0026 WAN2",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu.local.variable_workflow_01OOXNO9O23WU7GBZdHxCs4UN8AhAjiR8Rs$",
+              "variable_value_new": "$activity.definition_activity_01OOXNU87WIL72jE4jYVtg6ZIHxsMV6hM6w.output.jsonpath_queries.wan1$"
+            },
+            {
+              "variable_to_update": "$workflow.definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu.local.variable_workflow_01OOXZ3DPULUP0PFyhUzbSD1XqVPpfwNCU5$",
+              "variable_value_new": "$activity.definition_activity_01OOXNU87WIL72jE4jYVtg6ZIHxsMV6hM6w.output.jsonpath_queries.wan2$"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01OP1JBN9WD976x4xzl3un19nAwReH8m5dk",
+        "name": "NoIP-UpdateDomainIP",
+        "title": "NoIP-UpdateDomainIP",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "NoIP-UpdateDomainIP",
+          "input": {
+            "variable_workflow_01OP0KKD50F5V5ae6JQAQHZQGnvPxHwktYp": "$workflow.definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu.local.variable_workflow_01OOXNO9O23WU7GBZdHxCs4UN8AhAjiR8Rs$",
+            "variable_workflow_01OP0NLOH32AS4dfSsWawAy0xWSYwiHGd6p": "$workflow.definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu.local.variable_workflow_01OOXZ3DPULUP0PFyhUzbSD1XqVPpfwNCU5$"
+          },
+          "runtime_user": {
+            "override_target_runtime_user": true,
+            "runtime_user_id": "definition_runtime_user_01OP0SQQOUE0J7bfX1dBk7qaltDFOsyUYi6",
+            "runtime_user_type": "runtime_user.web-service_basic_credentials"
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5"
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "triggers": {
+    "triggerschedule_01OP1PTIX14HA7mOiKuyeoC1w6vA0ioK0w3": {
+      "workflow_id": "definition_workflow_01OOXNO9VDJ083Nk1SkTZQNawg9rfkaU9wu",
+      "name": "Hourly Schedule",
+      "title": "",
+      "lowercase_name": "schedule.hourly_schedule",
+      "description": "Run every day every hour",
+      "type": "schedule",
+      "base_type": "trigger",
+      "ref_id": "schedule_01OP1OOD5UXDB7FAyshAQlWTynG56LmIjIY",
+      "version": "",
+      "disabled": false,
+      "unique_name": "triggerschedule_01OP1PTIX14HA7mOiKuyeoC1w6vA0ioK0w3",
+      "object_type": "triggerschedule"
+    }
+  },
+  "schedules": {
+    "schedule_01OP1OOD5UXDB7FAyshAQlWTynG56LmIjIY": {
+      "unique_name": "schedule_01OP1OOD5UXDB7FAyshAQlWTynG56LmIjIY",
+      "name": "Hourly Schedule",
+      "description": "Run hourly every day",
+      "type": "basic.schedule",
+      "base_type": "schedule",
+      "properties": {
+        "calendar": "calendar_recurring_1BMfMWvgiDhSjBQ7hTSyvz3NyVZ",
+        "timezone": "US/Eastern",
+        "starttime": "00:00",
+        "interval_hours": 1,
+        "interval_minutes": 0,
+        "number_of_times": 24,
+        "display_name": "Hourly Schedule",
+        "description": "Run hourly every day"
+      },
+      "version": "1.0.0",
+      "object_type": "schedule"
+    }
+  },
+  "targets": {
+    "definition_target_01ONA7LL0PKAJ3tE40MgMW7oDJgYVctohQD": {
+      "unique_name": "definition_target_01ONA7LL0PKAJ3tE40MgMW7oDJgYVctohQD",
+      "name": "Cisco Meraki",
+      "title": "Cisco Meraki",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "Cisco Meraki",
+        "host": "api.meraki.com",
+        "ignore_proxy": true,
+        "no_runtime_user": true,
+        "path": "/api",
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y": {
+      "unique_name": "definition_target_01OP0RTMJI15160TCc7fJ9ecPuaxk6Yp74Y",
+      "name": "NoIP_Target",
+      "title": "NoIP_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "NoIP_Target",
+        "host": "dynupdate.no-ip.com",
+        "ignore_proxy": true,
+        "no_runtime_user": true,
+        "path": "/nic",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "variables": {
+    "variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV": {
+      "unique_name": "variable_01ONAW2GSGU1N2Guicp0pIg8ZdKrcEPY7iV",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Meraki API key",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01N8TO2HK1Q8U0JgFhBJbF2XBKYElhuFXU5",
+    "definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE",
+    "definition_workflow_01OP0KKDCBZP77IZVjsrTe8OoW1u5Sqa9e5"
+  ]
+}
