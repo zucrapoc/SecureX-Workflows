@@ -1,0 +1,202 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE",
+    "name": "Meraki - MX - Get Uplink Status",
+    "title": "Meraki - MX - Get Uplink Status",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Organization ID",
+          "type": "datatype.string",
+          "description": "The ID of the organization to get networks for",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXB5RPB494160vaqJQB6FvcKaAHlUvHA",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Meraki API Key",
+          "type": "datatype.secure_string",
+          "description": "Your Meraki API key. This can be generated in your Meraki dashboard",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXB5RPB32Q7fL22LwEQrmH9oiDUGYfm9",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Uplink Status",
+          "type": "datatype.string",
+          "description": "Uplink Status for the given organization",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01OOXB5RPAZDK0vGGWCiidrQjVD8cJNKNdz",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Cisco Meraki",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": false,
+      "description": "Get Uplink Status for a given Cisco Meraki organization.\n\nTarget: An HTTP endpoint for \"api.meraki.com\" with a path of \"/api\"\n",
+      "display_name": "Meraki - MX - Get Uplink Status",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX",
+        "name": "HTTP Request",
+        "title": "Get Uplink Status",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": true,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "X-Cisco-Meraki-API-Key",
+              "value": "$workflow.definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE.input.variable_workflow_01OOXB5RPB32Q7fL22LwEQrmH9oiDUGYfm9$"
+            }
+          ],
+          "display_name": "Get Uplink Status",
+          "method": "GET",
+          "relative_url": "v1/organizations/$workflow.definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE.input.variable_workflow_01OOXB5RPB494160vaqJQB6FvcKaAHlUvHA$/appliance/uplink/statuses",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01OOXB7723N6V7laHz222sFkoTJkrBBZYPM",
+        "name": "Condition Block",
+        "title": "Was the request successful?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was the request successful?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01OOXB7NUSBA33Eiv4p6fI3PKbW5fLaXZUS",
+            "name": "Condition Branch",
+            "title": "Success/200",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX.output.status_code$",
+                "operator": "eq",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Success/200",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01OOXB7RU4KNF5xBaEgC3RFu5ZsDOX6xfEY",
+                "name": "Set Variables",
+                "title": "Set output variable",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set output variable",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01OOXB5RVMSHO3brWmEa0B1omjlyA15X2hE.output.variable_workflow_01OOXB5RPAZDK0vGGWCiidrQjVD8cJNKNdz$",
+                      "variable_value_new": "$activity.definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX.output.response_body$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01OOXB8910EYR1A7bq7mMIbySB3SoZJBaNb",
+            "name": "Condition Branch",
+            "title": "Anything else",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX.output.status_code$",
+                "operator": "ne",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Anything else",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01OOXB8BCNR595eaMnDui7UaOlZtU5x44ra",
+                "name": "Completed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Failed",
+                  "result_message": "Failed to fetch network list\n\nStatus Code: $activity.definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX.output.status_code$\nResponse: $activity.definition_activity_01OOXB6PZJHL31h34Kg4MD713pELdC9JsoX.output.response_body$",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  }
+}
